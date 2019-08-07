@@ -50,6 +50,7 @@ struct permissions {
 */
 define_function(certificate_subject_lookup)
 {
+  YR_SCAN_CONTEXT* context = scan_context();
   YR_OBJECT* obj = parent();
   char *value = NULL;
   uint64_t result = 0;
@@ -59,7 +60,7 @@ define_function(certificate_subject_lookup)
   if (val) {
     value = (char *)json_string_value(val);
     if (value) {
-      if (yr_re_match(regexp_argument(1), value) > 0) {
+        if (yr_re_match(context, regexp_argument(1), value) > 0) {
         result = 1;
       }
     }
@@ -86,6 +87,7 @@ void remove_colon(const char* input, char* output) {
 */
 define_function(certificate_not_before_lookup_regex)
 {
+  YR_SCAN_CONTEXT* context = scan_context();
   YR_OBJECT* obj = parent();
   char *value = NULL;
   uint64_t result = 0;
@@ -97,7 +99,7 @@ define_function(certificate_not_before_lookup_regex)
   }
 
   if (value) {
-    if (yr_re_match(regexp_argument(1), value) > 0) {
+      if (yr_re_match(context, regexp_argument(1), value) > 0) {
       result = 1;
     }
   }
@@ -134,6 +136,7 @@ define_function(certificate_not_before_lookup_string)
 */
 define_function(certificate_not_after_lookup_regex)
 {
+  YR_SCAN_CONTEXT* context = scan_context();
   YR_OBJECT* obj = parent();
   char *value = NULL;
   uint64_t result = 0;
@@ -145,7 +148,7 @@ define_function(certificate_not_after_lookup_regex)
   }
 
   if (value) {
-    if (yr_re_match(regexp_argument(1), value) > 0) {
+      if (yr_re_match(context, regexp_argument(1), value) > 0) {
       result = 1;
     }
   }
@@ -214,6 +217,7 @@ define_function(certificate_sha1_lookup)
 */
 define_function(certificate_issuer_lookup)
 {
+  YR_SCAN_CONTEXT* context = scan_context();
   YR_OBJECT* obj = parent();
   char *value = NULL;
   uint64_t result = 0;
@@ -226,7 +230,7 @@ define_function(certificate_issuer_lookup)
   }
 
   if (value) {
-    if (yr_re_match(regexp_argument(1), value) > 0) {
+      if (yr_re_match(context, regexp_argument(1), value) > 0) {
       result = 1;
     }
   }
@@ -239,12 +243,13 @@ define_function(certificate_issuer_lookup)
 */
 define_function(main_activity_lookup)
 {
+  YR_SCAN_CONTEXT* context = scan_context();
   YR_OBJECT* obj = get_object(module(), "main_activity");
   char* value = obj->data;
   uint64_t result = 0;
 
   if (value) {
-    if (yr_re_match(regexp_argument(1), value) > 0) {
+      if (yr_re_match(context, regexp_argument(1), value) > 0) {
       result = 1;
     }
   }
@@ -257,6 +262,7 @@ define_function(main_activity_lookup)
 */
 define_function(permission_lookup)
 {
+  YR_SCAN_CONTEXT* context = scan_context();
   YR_OBJECT* obj = get_object(module(), "permission");
   struct permissions *a;
 
@@ -272,7 +278,7 @@ define_function(permission_lookup)
 
   json_array_foreach(list_perms, index, value)
   {
-    if (yr_re_match(regexp_argument(1), json_string_value(value)) > 0)
+      if (yr_re_match(context, regexp_argument(1), json_string_value(value)) > 0)
     {
       result = 1;
       break;
@@ -282,7 +288,7 @@ define_function(permission_lookup)
   if (!result) {
     json_array_foreach(list_new_perms, index, value)
     {
-      if (yr_re_match(regexp_argument(1), json_string_value(value)) > 0)
+        if (yr_re_match(context, regexp_argument(1), json_string_value(value)) > 0)
       {
         result = 1;
         break;
@@ -297,6 +303,7 @@ define_function(permission_lookup)
 */
 define_function(activity_lookup_regex)
 {
+  YR_SCAN_CONTEXT* context = scan_context();
   YR_OBJECT* activity_obj = get_object(module(), "activity");
   json_t* list = (json_t*) activity_obj->data;
 
@@ -306,7 +313,7 @@ define_function(activity_lookup_regex)
 
   json_array_foreach(list, index, value)
   {
-    if (yr_re_match(regexp_argument(1), json_string_value(value)) > 0)
+      if (yr_re_match(context, regexp_argument(1), json_string_value(value)) > 0)
     {
       result = 1;
       break;
@@ -343,6 +350,7 @@ define_function(activity_lookup_string)
 */
 define_function(service_lookup_regex)
 {
+  YR_SCAN_CONTEXT* context = scan_context();
   YR_OBJECT* service_obj = get_object(module(), "service");
   json_t* list = (json_t*) service_obj->data;
 
@@ -352,7 +360,7 @@ define_function(service_lookup_regex)
 
   json_array_foreach(list, index, value)
   {
-    if (yr_re_match(regexp_argument(1), json_string_value(value)) > 0)
+      if (yr_re_match(context, regexp_argument(1), json_string_value(value)) > 0)
     {
       result = 1;
       break;
@@ -389,6 +397,7 @@ define_function(service_lookup_string)
 */
 define_function(filter_lookup_regex)
 {
+  YR_SCAN_CONTEXT* context = scan_context();
   YR_OBJECT* filter_obj = get_object(module(), "filter");
   json_t* list = (json_t*) filter_obj->data;
 
@@ -398,7 +407,7 @@ define_function(filter_lookup_regex)
 
   json_array_foreach(list, index, value)
   {
-    if (yr_re_match(regexp_argument(1), json_string_value(value)) > 0)
+      if (yr_re_match(context, regexp_argument(1), json_string_value(value)) > 0)
     {
       result = 1;
       break;
@@ -435,6 +444,7 @@ define_function(filter_lookup_string)
 */
 define_function(receiver_lookup_regex)
 {
+  YR_SCAN_CONTEXT* context = scan_context();
   YR_OBJECT* receiver_obj = get_object(module(), "receiver");
   json_t* list = (json_t*) receiver_obj->data;
 
@@ -444,7 +454,7 @@ define_function(receiver_lookup_regex)
 
   json_array_foreach(list, index, value)
   {
-    if (yr_re_match(regexp_argument(1), json_string_value(value)) > 0)
+      if (yr_re_match(context, regexp_argument(1), json_string_value(value)) > 0)
     {
       result = 1;
       break;
@@ -481,12 +491,13 @@ define_function(receiver_lookup_string)
 */
 define_function(displayed_version_lookup_regex)
 {
+  YR_SCAN_CONTEXT* context = scan_context();
   YR_OBJECT* obj = get_object(module(), "displayed_version");
   char* value = obj->data;
   uint64_t result = 0;
 
   if (value) {
-    if (yr_re_match(regexp_argument(1), value) > 0) {
+      if (yr_re_match(context, regexp_argument(1), value) > 0) {
       result = 1;
     }
   }
@@ -518,10 +529,11 @@ define_function(displayed_version_lookup_string)
 */
 define_function(version_code_regex)
 {
+    YR_SCAN_CONTEXT* context = scan_context();
     YR_OBJECT *obj = get_object(module(), "version_code");
     char *value = obj->data;
 
-    return_integer(value && (yr_re_match(regexp_argument(1), value) == 0));
+    return_integer(value && (context, yr_re_match(context, regexp_argument(1), value) == 0));
 }
 
 
@@ -542,6 +554,7 @@ define_function(version_code_string)
 */
 define_function(url_lookup_regex)
 {
+  YR_SCAN_CONTEXT* context = scan_context();
   YR_OBJECT* obj = get_object(module(), "url");
   json_t* list = (json_t*) obj->data;
 
@@ -551,7 +564,7 @@ define_function(url_lookup_regex)
 
   json_array_foreach(list, index, value)
   {
-    if (yr_re_match(regexp_argument(1), json_string_value(value)) > 0)
+      if (yr_re_match(context, regexp_argument(1), json_string_value(value)) > 0)
     {
       result = 1;
       break;
@@ -588,12 +601,13 @@ define_function(url_lookup_string)
 */
 define_function(appname_lookup_regex)
 {
+  YR_SCAN_CONTEXT* context = scan_context();
   YR_OBJECT* obj = get_object(module(), "app_name");
   char* value = obj->data;
   uint64_t result = 0;
 
   if (value) {
-    if (yr_re_match(regexp_argument(1), value) > 0) {
+      if (yr_re_match(context, regexp_argument(1), value) > 0) {
       result = 1;
     }
   }
@@ -624,12 +638,13 @@ define_function(appname_lookup_string)
 */
 define_function(package_name_lookup_regex)
 {
+  YR_SCAN_CONTEXT* context = scan_context();
   YR_OBJECT* package_name_obj = get_object(module(), "package_name");
   char* value = package_name_obj->data;
   uint64_t result = 0;
 
   if (value) {
-    if (yr_re_match(regexp_argument(1), value) > 0) {
+      if (yr_re_match(context, regexp_argument(1), value) > 0) {
       result = 1;
     }
   }
