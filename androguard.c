@@ -536,29 +536,6 @@ define_function(version_code_string)
     return_integer(value && (strcasecmp(string_argument(1), value) == 0));
 }
 
-/*
-  Function to detect Android version name (with regex)
-*/
-define_function(version_name_regex)
-{
-    YR_OBJECT *obj = get_object(module(), "version_name");
-    char *value = obj->data;
-
-    return_integer(value && (yr_re_match(regexp_argument(1), value) == 0));
-}
-
-
-/*
-  Function to detect Android version name (with string)
-*/
-define_function(version_name_string)
-{
-    YR_OBJECT *obj = get_object(module(), "version_name");
-    char *value = obj->data;
-
-    return_integer(value && (strcasecmp(string_argument(1), value) == 0));
-}
-
 
 /*
   Function to detect url (with regex)
@@ -701,9 +678,6 @@ begin_declarations;
 
   declare_function("version_code", "r", "i", version_code_regex);
   declare_function("version_code", "s", "i", version_code_string);
-
-  declare_function("version_name", "r", "i", version_name_regex);
-  declare_function("version_name", "s", "i", version_name_string);
 
   declare_function("url", "r", "i", url_lookup_regex);
   declare_function("url", "s", "i", url_lookup_string);
